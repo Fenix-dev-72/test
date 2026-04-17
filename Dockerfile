@@ -1,6 +1,15 @@
-FROM python:3.12-alpine
+# Alpine o'rniga slim ishlating
+FROM python:3.12-slim
 
 WORKDIR /app
+
+# Ba'zi kutubxonalar uchun zarur bo'lishi mumkin bo'lgan tizim paketlari
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY . .
-RUN --mount=type=cache,id=custom-pip,target=/root/.cache/pip pip install -r req.txt # cache
+
+RUN pip install --no-cache-dir -r req.txt
+
 CMD ["python", "main.py"]
